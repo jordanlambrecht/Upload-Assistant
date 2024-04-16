@@ -16,8 +16,6 @@ import time
 
 from src.console import console 
 
-
-
 class Clients():
     """
     Add to torrent client
@@ -219,13 +217,6 @@ class Clients():
 
 
 
-
-
-
-
-
-
-
     def rtorrent(self, path, torrent_path, torrent, meta, local_path, remote_path, client):
         rtorrent = xmlrpc.client.Server(client['rtorrent_url'], context=ssl._create_stdlib_context())
         metainfo = bencode.bread(torrent_path)
@@ -308,7 +299,7 @@ class Clients():
         qbt_category = client.get("qbit_cat") if not meta.get("qbit_cat") else meta.get('qbit_cat')
 
         content_layout = client.get('content_layout', 'Original')
-        
+
         qbt_client.torrents_add(torrent_files=torrent.dump(), save_path=path, use_auto_torrent_management=auto_management, is_skip_checking=True, is_paused=False, content_layout=content_layout, category=qbt_category, tags=client.get('qbit_tag'))
         console.print(f"Added to: {path}")
         
