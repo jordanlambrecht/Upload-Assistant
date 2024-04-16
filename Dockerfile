@@ -4,14 +4,20 @@ FROM alpine:latest
 RUN apk add --no-cache mono --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing
 
 # install requirements
-RUN  apk add --no-cache --upgrade ffmpeg mediainfo python3 git py3-pip python3-dev g++ cargo mktorrent rust
-RUN pip3 install wheel
+RUN apk add --no-cache --upgrade ffmpeg mediainfo python3 git py3-pip python3-dev g++ cargo mktorrent rust
 
-WORKDIR Upload-Assistant
+# Create a virtual environment to isolate our package dependencies locally
+RUN python3 -m venv /venv
+ENV PATH="/venv/bin:$PATH"
 
-# install reqs
+# Ensure pip is updated in the virtual environment
+RUN pip install --upgrade pip
+
+WORKDIR /Upload-Assistant
+
+# Install requirements in the virtual environment
 COPY requirements.txt .
-RUN pip3 install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # copy everything
 COPY . .
